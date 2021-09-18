@@ -1,0 +1,37 @@
+{
+  "name": "trello-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tranquochuy2210/trello-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tranquochuy2210/trello-api/issues"
+  },
+  "homepage": "https://github.com/tranquochuy2210/trello-api#readme",
+  "lint-staged": {
+    "src/**/*.{js, json, scss}": "prettier --single-quote --trailing-comma all --tab-width 4 --write"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test"
+    }
+  },
+  "devDependencies": {
+    "husky": "^7.0.2",
+    "lint-staged": "^11.1.2",
+    "morgan": "^1.10.0",
+    "prettier": "^2.4.1"
+  },
+  "dependencies": {
+    "babel-plugin-module-resolver": "^4.1.0",
+    "express": "^4.17.1"
+  }
+}
