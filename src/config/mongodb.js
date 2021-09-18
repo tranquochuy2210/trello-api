@@ -2,29 +2,22 @@ const { MongoClient } = require('mongodb')
 require('dotenv').config()
 
 const uri = process.env.MONGODBURI
-
+let dbInstance=null
 
 const connectDB = async () => {
     const client = new MongoClient( uri, {
         useUnifiedTopology: true,
         useNewUrlParser: true
     })
-    try {
-        await client.connect()
-        //list database
-        await listDatabases(client)
-        console.log('connect successfully to the server')
-    } catch (error) {
-        console.log(error)
-    } finally {
-        //ensure that client will close
-        await client.close()
-    }
+    await client.connect()
+    dbInstance = client.db(process.env.DB_NAME)
 }
-const listDatabases = async(client) => {
-    const databaseList = await client.db().admin().listDatabases()
-    databaseList.databases.forEach((database) => {
-        console.log(`${database.name}`)
-    })
+
+//get database instance
+
+const getDB = () => {
+    if (!dbInstance) throw new Error ('Must connect to DD first')
+    return dbInstance
 }
-module.exports={ connectDB, listDatabases }
+
+module.exports={ connectDB, getDB }
