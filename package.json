@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node src/index.js"
+    "clean": "rm -rf build && mkdir build",
+    "build-babel": "babel ./src -d ./build/src",
+    "build": "npm run clean && npm run build-babel",
+    "production": "npm run build && node ./build/src/index.js",
+    "dev": "nodemon --exec ./node_modules/.bin/babel-node ./src/index.js"
   },
   "repository": {
     "type": "git",
@@ -25,13 +29,19 @@
     }
   },
   "devDependencies": {
+    "@babel/cli": "^7.15.7",
+    "@babel/core": "^7.15.5",
+    "@babel/node": "^7.15.4",
+    "@babel/plugin-transform-runtime": "^7.15.0",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "@babel/preset-env": "^7.15.6",
     "husky": "^7.0.2",
     "lint-staged": "^11.1.2",
     "morgan": "^1.10.0",
     "prettier": "^2.4.1"
   },
   "dependencies": {
-    "babel-plugin-module-resolver": "^4.1.0",
+    "@babel/runtime": "^7.15.4",
     "express": "^4.17.1"
   }
 }
