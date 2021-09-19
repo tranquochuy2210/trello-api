@@ -1,7 +1,9 @@
 const express = require ('express')
-const BoardModel = require ('*/models/board.model')
+const bodyParser = require('body-parser')
+const router = require('*/routes/v1/index')
 
 const { connectDB } = require('*/config/mongodb')
+const { json } = require('express')
 require('dotenv').config()
 
 const port = process.env.PORT || 3000
@@ -16,13 +18,13 @@ connectDB()
 
 const bootServer = () => {
     const app = express()
-    app.get ('/test', async(req, res) => {
-        let fakeData = {
-            title: 'title1'
-        }
-        await BoardModel.createNew(fakeData)
-        res.send('<h1>hello world</h1>')
-    })
+    
+    // parse application/json
+    app.use(bodyParser.json())
+
+    // parse application/x-www-form-urlencoded
+    app.use(bodyParser.urlencoded({ extended: true }))
+    app.use(router)
     app.listen(port, () => {
         console.log(`server is running on port ${port}`)
     })
