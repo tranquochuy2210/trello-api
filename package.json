@@ -44,9 +44,11 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.15.4",
+    "body-parser": "^1.19.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "joi": "^17.4.2",
+    "joi-objectid": "^4.0.2",
     "mongodb": "^4.1.2",
     "mongoose": "^6.0.6"
   }

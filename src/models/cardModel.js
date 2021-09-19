@@ -1,5 +1,6 @@
 const Joi = require('joi')
 const { getDB } = require('*/config/mongodb')
+const { ObjectId } = require('mongodb')
 
 
 //define
@@ -7,7 +8,7 @@ const cardCollectionName = 'cards'
 const cardCollectionSchema = Joi.object({
     boardId: Joi.string().required(),
     columnId: Joi.string().required(),
-    title: Joi.string().required().min(3).max(20),
+    title: Joi.string().required().min(3).max(50),
     cover: Joi.string().default(null),
     createdAt: Joi.date().timestamp().default(Date.now()),
     updatedAt: Joi.date().timestamp().default(null),
@@ -18,12 +19,15 @@ const validateSchema = async (data) => {
 }
 const createNew = async (data) => {
     try {
-        const value =await validateSchema(data)
-        const result = await getDB().collection(cardCollectionName).insertOne(value)
+        const validatedValue =await validateSchema(data)
+        const insertValue = { ...validatedValue, columnId: ObjectId(validatedValue.columnId), boardId: ObjectId(validatedValue.boardId) }
+        const response = await getDB().collection(cardCollectionName).insertOne(insertValue)
+        const result = await getDB().collection(cardCollectionName).findOne({ _id: response.insertedId })
         return result
     } catch (error) {
         console.log(error)
     }
 }
+
 
 module.exports = { createNew }
