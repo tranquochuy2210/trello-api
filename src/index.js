@@ -29,8 +29,7 @@ const bootServer = () => {
             }
         },
         optionsSuccessStatus: 200
-      }
-    
+    }
     app.use(cors(corsOptions))
     // parse application/json
     app.use(bodyParser.json())
