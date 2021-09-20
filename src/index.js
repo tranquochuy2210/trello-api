@@ -19,7 +19,7 @@ connectDB()
 
 const bootServer = () => {
     const app = express()
-    const WHITELIST_DOMAINS = ['http://localhost:3000']
+    const WHITELIST_DOMAINS = ['http://localhost:3000', 'https://trello-huy-2210.web.app']
     const corsOptions = {
         origin: function (origin, callback) {
             if (WHITELIST_DOMAINS.indexOf(origin) !== -1) {
