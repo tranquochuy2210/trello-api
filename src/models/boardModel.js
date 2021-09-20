@@ -1,6 +1,7 @@
 const Joi = require('joi')
 const { getDB } = require('*/config/mongodb')
 const { ObjectId } = require('mongodb')
+const Card = require('./cardModel')
 Joi.objectId = require('joi-objectid')(Joi)
 
 const boardCollectionName = 'boards'
@@ -41,27 +42,25 @@ const pushColumnOrders = async (boardId, columnId) => {
 
 const getFullBoard = async (boardId) => {
     try {
-        const result = await getDB().collection(boardCollectionName).aggregate([
-            { $match: { _id: ObjectId(boardId) } },
+        const data = await getDB().collection(boardCollectionName).aggregate([
+            { $match: { _id: ObjectId(boardId), _destroy: false } },
             { $lookup:
                 {
                     from: 'columns',
                     localField:'_id',
                     foreignField:'boardId',
                     as: 'columns'
-                } },
-            { $lookup:
-                {
-                    from: 'cards',
-                    localField:'_id',
-                    foreignField:'boardId',
-                    as: 'cards'
-                }
-            }
-
+                } }
         ]
         ).toArray()
-        return result[0] || {}
+        const result = data[0]
+        if (!result) return {}
+
+        result.columns = result.columns.filter(column => !column._destroy)
+        for ( let column of result.columns) {
+            column.cards = await Card.getCards ('columnId', column._id)
+        }
+        return result
     } catch (error) {
         console.log(error)
         throw new Error(error)

@@ -41,12 +41,15 @@ const pushCardToColumnOrder = async (columnId, cardId) => {
 
 const update =async (id, data) => {
     try {
+        const updateData = { ... data }
+        if (updateData._id) {delete updateData._id}
+        if (updateData.cards) {delete updateData._cards}
         const result = await getDB().collection(columnCollectionName).findOneAndUpdate(
             { _id: ObjectId(id) },
-            { $set : data },
+            { $set : updateData },
             { returnDocument: 'after' }
         )
-        return result
+        return result.value
     } catch (error) {
         throw new Error(error)
     }

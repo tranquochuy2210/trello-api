@@ -13,14 +13,15 @@ const createNew = async (data) => {
 const getFullBoard = async (id) => {
     try {
         const board = await Board.getFullBoard(id)
-        board.columns.forEach(column => {
-            column.cards = board.cards.filter(c => c.columnId.toString() === column._id.toString())
-        })
+        console.log(board)
+        if (!Object.keys(board).length) {
+            throw new Error('cannot find board')
+        }
         //delete cards
         delete board.cards
         return board
     } catch (error) {
-        throw new Error(error)
+        throw new Error(error.message)
     }
 }
 
