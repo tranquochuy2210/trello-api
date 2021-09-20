@@ -25,9 +25,36 @@ const createNew = async (data) => {
         const result = await getDB().collection(cardCollectionName).findOne({ _id: response.insertedId })
         return result
     } catch (error) {
-        console.log(error)
+        throw new Error(error.message)
+    }
+}
+const getCards =async (field, value) => {
+    try {
+        console.log(field, value)
+        if ( !['boardId', 'columnId'].includes(field)) {
+            throw new Error('field not invalid')
+        }
+        const match = { _destroy : false }
+        match [field] =value
+        const result= await getDB().collection(cardCollectionName).find(match).toArray()
+        return result
+    } catch (error) {
+        throw new Error(error.message)
     }
 }
 
+//id :array
 
-module.exports = { createNew }
+const deleteMany = async (ids) => {
+    try {
+        const result = await getDB().collection(cardCollectionName).updateMany(
+            { _id: { $in: ids } },
+            { $set: { _destroy: true } }
+        )
+        return result.value
+    } catch (error) {
+        throw new Error(error.message)
+    }
+}
+
+module.exports = { createNew, getCards, deleteMany }
