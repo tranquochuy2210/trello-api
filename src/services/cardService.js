@@ -12,4 +12,19 @@ const createNew = async (data) => {
     }
 }
 
-module.exports = { createNew }
+const update = async (id, data) => {
+    try {
+        const updateData={
+            ...data,
+            updatedAt: Date.now()
+        }
+        if (updateData._id) delete updateData._id
+        const updatedCard = await Card.update(id, updateData)
+        return updatedCard
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+
+module.exports = { createNew, update}

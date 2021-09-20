@@ -11,7 +11,6 @@ const createNew = async (data) => {
         await Board.pushColumnOrders(boardId, columnId)
         return newColumn
     } catch (error) {
-        console.log(error)
         throw new Error(error)
     }
 }
@@ -30,7 +29,6 @@ const update = async (id, data) => {
         }
         return result
     } catch (error) {
-        console.log(error)
         throw new Error(error)
     }
 }

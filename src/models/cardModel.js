@@ -30,7 +30,6 @@ const createNew = async (data) => {
 }
 const getCards =async (field, value) => {
     try {
-        console.log(field, value)
         if ( !['boardId', 'columnId'].includes(field)) {
             throw new Error('field not invalid')
         }
@@ -57,4 +56,20 @@ const deleteMany = async (ids) => {
     }
 }
 
-module.exports = { createNew, getCards, deleteMany }
+const update = async (id, data) => {
+    try {
+        const updateData = { ... data }
+        if (updateData.boardId) updateData.boardId = ObjectId(updateData.boardId)
+        if (updateData.columnId) updateData.columnId = ObjectId(updateData.columnId)
+        const result = await getDB().collection(cardCollectionName).findOneAndUpdate(
+            { _id: ObjectId(id) },
+            { $set : updateData },
+            { returnDocument: 'after' }
+        )
+        return result.value
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+module.exports = { createNew, getCards, deleteMany, update }

@@ -35,7 +35,6 @@ const pushColumnOrders = async (boardId, columnId) => {
         )
         return result.value
     } catch (error) {
-        console.log(error)
         throw new Error(error)
     }
 }
@@ -62,10 +61,22 @@ const getFullBoard = async (boardId) => {
         }
         return result
     } catch (error) {
-        console.log(error)
         throw new Error(error)
     }
 }
 
+const update = async (id, data) => {
+    try {
+        const updateData = { ... data }
+        const result = await getDB().collection(boardCollectionName).findOneAndUpdate(
+            { _id: ObjectId(id) },
+            { $set : updateData },
+            { returnDocument: 'after' }
+        )
+        return result.value
+    } catch (error) {
+        throw new Error(error)
+    }
+}
 
-module.exports = { createNew, getFullBoard, pushColumnOrders }
+module.exports = { createNew, getFullBoard, pushColumnOrders, update }
